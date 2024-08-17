@@ -1,0 +1,48 @@
+import math
+import time
+
+def binario_recursivo(x, i, f):
+    if i > f: 
+        return ""
+    pivote = (i+f)//2
+    pos = str((x//(2**pivote))%2)
+    der = str(binario_recursivo(x, pivote+1, f))
+    izq = str(binario_recursivo(x, i, pivote-1))
+    return der + pos + izq
+
+def binario_iterativo(x):
+    if x == 0:
+        return "0"
+    binario = ""
+    while x > 0:
+        binario = str(x % 2) + binario
+        x = x // 2
+    return binario
+
+def medir_tiempo(func, *args):
+    start_time = time.time()
+    resultado = func(*args)
+    end_time = time.time()
+    return end_time - start_time
+
+# Listas para almacenar los tiempos
+tiempos_recursivos = []
+tiempos_iterativos = []
+numeros = list(range(1, 21))
+
+# Medir los tiempos de ambos algoritmos
+for i in numeros:
+    # Recursivo
+    n = int(math.log(i, 2)) if i > 0 else 0
+    tiempo_recursivo = medir_tiempo(binario_recursivo, i, 0, n)
+    tiempos_recursivos.append(tiempo_recursivo)
+
+    # Iterativo
+    tiempo_iterativo = medir_tiempo(binario_iterativo, i)
+    tiempos_iterativos.append(tiempo_iterativo)
+
+    # Imprimir los tiempos
+    print(f"Número: {i}")
+    print(f"Tiempo Recursivo: {tiempo_recursivo:.6f} segundos")
+    print(f"Tiempo Iterativo: {tiempo_iterativo:.6f} segundos")
+    print("-" * 30)
